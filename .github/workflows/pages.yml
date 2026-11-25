@@ -1,0 +1,53 @@
+# نشر الموقع تلقائيًا على GitHub Pages عند كل رفع إلى الفرع main.
+# يُنشأ ملف js/config.js من أسرار المستودع (Settings → Secrets and variables → Actions)،
+# فلا يوجد أي مفتاح داخل الكود.
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Build js/config.js from repository secrets
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_PUBLISHABLE_KEY: ${{ secrets.SUPABASE_PUBLISHABLE_KEY }}
+          WISHLIST_FAMILY_EMAIL: ${{ secrets.WISHLIST_FAMILY_EMAIL }}
+          WISHLIST_AUTH_MODE: ${{ vars.WISHLIST_AUTH_MODE }}
+        run: |
+          if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_PUBLISHABLE_KEY" ]; then
+            echo "::warning::Supabase secrets are not set yet. The site will show the setup screen until you add them and re-run this workflow."
+          else
+            node scripts/build-config.mjs
+          fi
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload site
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: .
+
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4
