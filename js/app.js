@@ -415,6 +415,9 @@
         const meta = !s2.total ? `<span class="none">لا توجد منتجات</span>`
           : !s2.left ? `<span class="done">${icon('i-check')}اكتمل</span>`
             : `<span>${esc(nProducts(s2.total))}</span>`;
+        if (cls === 'all') {
+          return `<a class="cat all" href="${href}"><i class="cat-ico" aria-hidden="true">${icon('i-grid')}</i><div class="cat-text"><b>${esc(name)}</b>${meta}</div><i class="cat-go" aria-hidden="true">${icon('i-back')}</i></a>`;
+        }
         return `<a class="cat${cls ? ' ' + cls : ''}" href="${href}"><b>${esc(name)}</b>${meta}</a>`;
       };
       let grid = card(link(section, member, 'all'), 'كل المنتجات', scope, 'all');

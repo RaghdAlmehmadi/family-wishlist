@@ -277,8 +277,20 @@ body.is-home .foot button:hover { color: #fff; }
 .cat span.none { color: var(--ink-3); font-weight: 400; }
 .cat span.done { color: var(--ok); }
 .cat span .ic { width: 16px; height: 16px; }
-.cat.all { background: var(--tone); }
-.cat.all b { color: var(--deep); }
+.cat.all {
+  grid-column: 1 / -1; flex-direction: row; align-items: center; justify-content: flex-start; gap: 14px;
+  min-height: 78px; padding: 14px 18px;
+  background: radial-gradient(60% 160% at 90% 0%, rgba(180, 154, 101, .22), transparent 60%), linear-gradient(135deg, #182A4A, #2B4471);
+}
+.cat.all:hover { background: radial-gradient(60% 160% at 90% 0%, rgba(180, 154, 101, .3), transparent 60%), linear-gradient(135deg, #1D3256, #33507F); }
+.cat-ico { width: 44px; height: 44px; flex: none; border-radius: 50%; display: grid; place-items: center; background: var(--tone); color: var(--deep); }
+.cat-ico .ic { width: 22px; height: 22px; }
+.cat-text { display: grid; gap: 2px; min-width: 0; }
+.cat.all b { color: var(--title-light); font-size: 17px; }
+.cat.all span, .cat.all span.none { color: #CFDAE8; font-weight: 400; }
+.cat.all span.done { color: #BFE3CF; }
+.cat-go { margin-inline-start: auto; color: var(--gold); display: grid; }
+.cat-go .ic { transform: scaleX(-1); }
 .add-cat { margin-top: 14px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
 .add-cat .btn-text { display: inline-flex; align-items: center; gap: 6px; color: var(--deep); }
 .add-cat input { width: min(260px, 100%); min-height: 44px; }

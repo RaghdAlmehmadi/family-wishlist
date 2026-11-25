@@ -192,13 +192,11 @@ insert into public.categories (section_id, name, sort_order) values
   ('pharmacy', 'التصبغات وتوحيد اللون',     2),
   ('pharmacy', 'الهالات والعناية بالعين',   3),
   ('pharmacy', 'العناية بالجسم',            4),
-  ('pharmacy', 'المناطق الحساسة',           5),
-  ('pharmacy', 'العناية بالشعر',            6),
-  ('pharmacy', 'الرموش والحواجب',           7),
-  ('pharmacy', 'الأظافر',                   8),
-  ('pharmacy', 'الأسنان والفم',             9),
-  ('pharmacy', 'العناية الشخصية',           10),
-  ('pharmacy', 'المكملات والفيتامينات',     11),
+  ('pharmacy', 'العناية بالشعر',            5),
+  ('pharmacy', 'الرموش والحواجب',           6),
+  ('pharmacy', 'الأظافر',                   7),
+  ('pharmacy', 'الأسنان والفم',             8),
+  ('pharmacy', 'المكملات والفيتامينات',     9),
   ('pharmacy', 'منتجات أخرى',               999),
   ('makeup',   'الوجه',                     1),
   ('makeup',   'العيون',                    2),
@@ -215,6 +213,14 @@ update public.products p
  where p.category_id in (select id from public.categories where section_id = 'pharmacy' and name = 'المكياج');
 
 delete from public.categories where section_id = 'pharmacy' and name = 'المكياج';
+
+-- ترقية: حذف تصنيفَي «المناطق الحساسة» و«العناية الشخصية» من الصيدلية،
+-- وما فيهما من منتجات ينتقل إلى «منتجات أخرى» في الصيدلية نفسها.
+update public.products p
+   set category_id = (select id from public.categories where section_id = 'pharmacy' and name = 'منتجات أخرى')
+ where p.category_id in (select id from public.categories where section_id = 'pharmacy' and name in ('المناطق الحساسة', 'العناية الشخصية'));
+
+delete from public.categories where section_id = 'pharmacy' and name in ('المناطق الحساسة', 'العناية الشخصية');
 
 
 -- ---------------------------------------------------------------------

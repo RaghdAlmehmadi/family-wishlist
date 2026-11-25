@@ -37,6 +37,7 @@
   <symbol id="i-trash" viewBox="0 0 24 24"><path d="M5 7h14M10 7V5h4v2M7 7l1 12h8l1-12" ${L}/></symbol>
   <symbol id="i-edit" viewBox="0 0 24 24"><path d="M5 19l1-4L15.5 5.5a2 2 0 0 1 3 3L9 18z" ${L}/></symbol>
   <symbol id="i-share" viewBox="0 0 24 24"><g ${L}><circle cx="9" cy="9" r="3"/><path d="M3.5 19c.8-3 3-4.6 5.5-4.6s4.7 1.6 5.5 4.6"/><circle cx="16.5" cy="8" r="2.4"/><path d="M15.5 13.2c2.4-.2 4.3 1.2 5 3.8"/></g></symbol>
+  <symbol id="i-grid" viewBox="0 0 24 24"><g ${L}><rect x="4" y="4" width="6.5" height="6.5" rx="1.6"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.6"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.6"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.6"/></g></symbol>
   <symbol id="i-group" viewBox="0 0 24 24"><g ${L}><circle cx="12" cy="8.4" r="3"/><path d="M6.6 19c.6-3 2.8-4.8 5.4-4.8s4.8 1.8 5.4 4.8"/><circle cx="5.6" cy="10.2" r="2.1"/><path d="M2.6 17.6c.4-2 1.6-3.2 3.2-3.5"/><circle cx="18.4" cy="10.2" r="2.1"/><path d="M21.4 17.6c-.4-2-1.6-3.2-3.2-3.5"/></g></symbol>
   <symbol id="i-snow" viewBox="0 0 24 24"><g ${L} stroke-width="1.3"><path d="M12 3v18M4.2 7.5l15.6 9M4.2 16.5l15.6-9"/><path d="M10 4.6l2 1.6 2-1.6M10 19.4l2-1.6 2 1.6M4.7 10l2.4-.9-.4-2.5M19.3 14l-2.4.9.4 2.5M4.7 14l2.4.9-.4 2.5M19.3 10l-2.4-.9.4-2.5"/></g></symbol>
 

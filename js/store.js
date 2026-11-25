@@ -29,8 +29,8 @@
       { id: 'gifts', name: 'الإكسسوارات', sort_order: 6 },
     ],
     categories: {
-      pharmacy: ['العناية بالوجه', 'التصبغات وتوحيد اللون', 'الهالات والعناية بالعين', 'العناية بالجسم', 'المناطق الحساسة',
-        'العناية بالشعر', 'الرموش والحواجب', 'الأظافر', 'الأسنان والفم', 'العناية الشخصية', 'المكملات والفيتامينات', 'منتجات أخرى'],
+      pharmacy: ['العناية بالوجه', 'التصبغات وتوحيد اللون', 'الهالات والعناية بالعين', 'العناية بالجسم',
+        'العناية بالشعر', 'الرموش والحواجب', 'الأظافر', 'الأسنان والفم', 'المكملات والفيتامينات', 'منتجات أخرى'],
       makeup: ['الوجه', 'العيون', 'الشفاه', 'الحواجب', 'الفرش والأدوات', 'منتجات أخرى'],
     },
   };
@@ -182,6 +182,15 @@
         }
         db = { categories: cats, products: [] };
         this._write(db, false);
+      }
+      // ترقية بيانات المعاينة: حذف تصنيفين من الصيدلية ونقل منتجاتهما إلى «منتجات أخرى»
+      const removed = db.categories.filter((c) => c.section_id === 'pharmacy' && (c.name === 'المناطق الحساسة' || c.name === 'العناية الشخصية'));
+      if (removed.length) {
+        const other = db.categories.find((c) => c.section_id === 'pharmacy' && c.name === 'منتجات أخرى');
+        const ids = removed.map((c) => c.id);
+        db.products.forEach((p) => { if (ids.includes(p.category_id)) p.category_id = other ? other.id : null; });
+        db.categories = db.categories.filter((c) => !ids.includes(c.id));
+        try { this._write(db, false); } catch (e) { /* */ }
       }
       return db;
     }
