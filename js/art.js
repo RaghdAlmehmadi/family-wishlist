@@ -47,6 +47,7 @@
   <symbol id="s-bags" viewBox="0 0 24 24"><g ${L}><path d="M5 9h14l-1.2 11.2H6.2z"/><path d="M9 9V7.2a3 3 0 0 1 6 0V9"/></g></symbol>
   <symbol id="s-fashion" viewBox="0 0 24 24"><g ${L}><path d="M10.1 6.4A1.9 1.9 0 1 1 12 8.6v1.6"/><path d="M12 10.2l-8.2 5.6a1 1 0 0 0 .6 1.8h15.2a1 1 0 0 0 .6-1.8z"/></g></symbol>
   <symbol id="s-gifts" viewBox="0 0 24 24"><g ${L}><circle cx="12" cy="15" r="5.6"/><path d="M9.6 6.4L12 4l2.4 2.4L12 9.4z"/></g></symbol>
+  <symbol id="s-toys" viewBox="0 0 24 24"><g ${L}><path d="M6.6 9.96A2.4 2.4 0 1 1 9.4 7.46M14.6 7.46A2.4 2.4 0 1 1 17.4 9.96"/><circle cx="12" cy="13.2" r="6.3"/><ellipse cx="12" cy="15.7" rx="2.5" ry="1.9"/><path d="M9.6 12.1h.01M14.4 12.1h.01M11.5 15.2h1"/></g></symbol>
   <symbol id="s-all" viewBox="0 0 24 24"><g ${L}><rect x="4.5" y="9" width="15" height="11" rx="1.5"/><path d="M3.5 6.5h17V9h-17zM12 6.5V20"/><path d="M12 6.5c-1.6-3-5.6-3-4.5-.5.6 1.1 2.6.5 4.5.5zM12 6.5c1.6-3 5.6-3 4.5-.5-.6 1.1-2.6.5-4.5.5z"/></g></symbol>
 </svg>`;
 

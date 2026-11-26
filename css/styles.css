@@ -54,6 +54,7 @@
 [data-tone=bags]     { --tone: #F4EFE5; --tone-2: #FAF7F1; --deep: #7A643F; }
 [data-tone=fashion]  { --tone: #E7F2EC; --tone-2: #F2F8F4; --deep: #3F7559; }
 [data-tone=gifts]    { --tone: #EAF4FA; --tone-2: #F4F9FC; --deep: #3C6688; }
+[data-tone=toys]     { --tone: #FBE6D8; --tone-2: #FDF3EC; --deep: #9C5533; }
 
 *, *::before, *::after { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; scroll-padding-top: calc(var(--head-h) + var(--tabs-h) + 16px); }
@@ -217,6 +218,19 @@ body.is-home .foot button:hover { color: #fff; }
 .sec-nums b { font-family: var(--font-head); font-weight: 500; font-size: 22px; line-height: 1.25; color: var(--deep); font-variant-numeric: tabular-nums; }
 .sec-nums span { font-size: 13px; color: var(--ink-2); }
 .sec-nums .done b { color: var(--ok); }
+/* بطاقة القسم الأخيرة إذا بقيت وحدها في صفها: تمتد بعرض الصف وتصطف أفقيًا */
+@media (max-width: 767px) {
+  .sec-card:last-child:nth-child(odd) { grid-column: 1 / -1; flex-direction: row; align-items: center; justify-content: space-between; min-height: 0; }
+  .sec-card:last-child:nth-child(odd) > div:first-child { display: flex; align-items: center; gap: 14px; }
+  .sec-card:last-child:nth-child(odd) h3 { margin-top: 0; }
+  .sec-card:last-child:nth-child(odd) .sec-nums { margin-top: 0; }
+}
+@media (min-width: 768px) {
+  .sec-card:last-child:nth-child(3n+1) { grid-column: 1 / -1; flex-direction: row; align-items: center; justify-content: space-between; min-height: 0; }
+  .sec-card:last-child:nth-child(3n+1) > div:first-child { display: flex; align-items: center; gap: 16px; }
+  .sec-card:last-child:nth-child(3n+1) h3 { margin-top: 0; }
+  .sec-card:last-child:nth-child(3n+1) .sec-nums { margin-top: 0; }
+}
 
 /* ---------- صفحة القسم ---------- */
 .sec-band {

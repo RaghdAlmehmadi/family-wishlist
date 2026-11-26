@@ -19,6 +19,7 @@
       { id: 'salman', name: 'سلمان', gender: 'm', sort_order: 6 },
       { id: 'rawan', name: 'روان', gender: 'f', sort_order: 7 },
       { id: 'naif', name: 'نايف', gender: 'm', sort_order: 8 },
+      { id: 'lamar', name: 'لمار', gender: 'f', sort_order: 9 },
     ],
     sections: [
       { id: 'pharmacy', name: 'الصيدلية', sort_order: 1 },
@@ -27,6 +28,7 @@
       { id: 'bags', name: 'الشنط', sort_order: 4 },
       { id: 'fashion', name: 'الملابس', sort_order: 5 },
       { id: 'gifts', name: 'الإكسسوارات', sort_order: 6 },
+      { id: 'toys', name: 'الألعاب', sort_order: 7 },
     ],
     categories: {
       pharmacy: ['العناية بالوجه', 'التصبغات وتوحيد اللون', 'الهالات والعناية بالعين', 'العناية بالجسم',

@@ -167,7 +167,8 @@ insert into public.members (id, name, gender, sort_order) values
   ('adel',   'عادل',  'm', 5),
   ('salman', 'سلمان', 'm', 6),
   ('rawan',  'روان',  'f', 7),
-  ('naif',   'نايف',  'm', 8)
+  ('naif',   'نايف',  'm', 8),
+  ('lamar',  'لمار',  'f', 9)
 on conflict (id) do nothing;
 
 insert into public.sections (id, name, sort_order) values
@@ -176,7 +177,8 @@ insert into public.sections (id, name, sort_order) values
   ('perfumes', 'العطور',       3),
   ('bags',     'الشنط',        4),
   ('fashion',  'الملابس',      5),
-  ('gifts',    'الإكسسوارات', 6)
+  ('gifts',    'الإكسسوارات', 6),
+  ('toys',     'الألعاب',     7)
 on conflict (id) do update
   set name = excluded.name, sort_order = excluded.sort_order;
 
