@@ -224,6 +224,11 @@ update public.products p
 
 delete from public.categories where section_id = 'pharmacy' and name in ('المناطق الحساسة', 'العناية الشخصية');
 
+-- التصنيفات في الصيدلية والمكياج فقط: منتجات بقية الأقسام تبقى كما هي وتُفصل عن أي تصنيف
+update public.products set category_id = null
+ where category_id is not null and section_id not in ('pharmacy', 'makeup');
+delete from public.categories where section_id not in ('pharmacy', 'makeup');
+
 
 -- ---------------------------------------------------------------------
 -- 5) الصلاحيات وأمان الصفوف (RLS)

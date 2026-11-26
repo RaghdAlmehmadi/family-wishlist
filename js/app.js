@@ -80,7 +80,10 @@
     if (member === 'shared') return !!p.is_shared;
     return p.member_ids.includes(member);
   }
-  const hasCat = (p) => !!(p.category_id && S.D.catById[p.category_id]);
+  // التصنيفات في الصيدلية والمكياج فقط؛ بقية الأقسام قائمة منتجات مباشرة
+  const CAT_SECTIONS = ['pharmacy', 'makeup'];
+  const catsOf = (sid) => (CAT_SECTIONS.includes(sid) ? S.D.catsBySection[sid] || [] : []);
+  const hasCat = (p) => !!(p.category_id && S.D.catById[p.category_id] && CAT_SECTIONS.includes(p.section_id));
 
   // ---------------------------------------------------------------
   // الشاشات
@@ -315,7 +318,7 @@
   function addContext() {
     const r = S.route;
     if (r.view !== 'section' || r.member === 'all') return null;
-    const cats = S.D.catsBySection[r.section] || [];
+    const cats = catsOf(r.section);
     let category = null;
     if (cats.length) {
       if (!r.cat || r.cat === 'all') return null;
@@ -379,7 +382,7 @@
       return `<div class="empty">${esc(msg)}</div>`;
     }
     if (!groupByCat) return `<ul class="items">${visible.map((p) => itemRow(p, member)).join('')}</ul>`;
-    const cats = D.catsBySection[sectionId] || [];
+    const cats = catsOf(sectionId);
     let out = '';
     for (const c of cats) {
       const g = visible.filter((p) => p.category_id === c.id);
@@ -394,7 +397,7 @@
     const D = S.D;
     const { section, member, cat } = S.route;
     const sec = D.sectionById[section];
-    const cats = D.catsBySection[section] || [];
+    const cats = catsOf(section);
     const scope = D.products.filter((p) => p.section_id === section && memberMatch(p, member));
     const st = stats(scope);
     const ctx = addContext();
@@ -444,8 +447,7 @@
         <div class="content-head"><h2>${esc(title)}${srSuffix}</h2>${addBtn}</div>
         ${filtersBar()}
         ${listBlock(list, member, emptyText, groupByCat, section)}
-        ${addHint ? `<p class="hint" style="margin-top:18px">${addHint}</p>` : ''}
-        ${!cats.length ? `<div class="add-cat" id="add-cat"><button class="btn-text" data-action="add-cat">${icon('i-plus')}إضافة تصنيف</button></div>` : ''}`;
+        ${addHint ? `<p class="hint" style="margin-top:18px">${addHint}</p>` : ''}`;
     }
 
     const v = $('#view-section');
@@ -547,6 +549,7 @@
     menuEl.innerHTML = `
       <button role="menuitem" data-action="edit" data-id="${id}">${icon('i-edit')}تعديل</button>
       <button role="menuitem" data-action="share" data-id="${id}">${icon('i-share')}${p.is_shared ? 'تعديل المشاركة' : 'نقل إلى المنتجات المشتركة'}</button>
+      ${catsOf(p.section_id).length ? `<button role="menuitem" data-action="move" data-id="${id}">${icon('i-move')}تبديل التصنيف</button>` : ''}
       <button role="menuitem" class="danger" data-action="delete" data-id="${id}">${icon('i-trash')}<span>حذف</span></button>`;
     document.body.appendChild(menuEl);
     const r = btn.getBoundingClientRect();
@@ -774,6 +777,49 @@
     });
   }
 
+  // ---------- تبديل التصنيف ----------
+  function openMove(product) {
+    if (!product) return;
+    const cats = catsOf(product.section_id);
+    const panel = openPanel(`
+      <div class="panel-head">
+        <div><h2>تبديل التصنيف</h2><p>${esc(product.name)}</p></div>
+        <button type="button" class="icon-btn" data-close aria-label="إغلاق">${icon('i-close')}</button>
+      </div>
+      <div class="panel-body">
+        <p class="panel-note">اختاروا التصنيف الجديد لهذا المنتج.</p>
+        <ul class="moves">${cats.map((c) => {
+          const cur = c.id === product.category_id;
+          return `<li><button type="button" data-cat="${c.id}" ${cur ? 'aria-current="true" disabled' : ''}><span>${esc(c.name)}</span>${cur ? '<small>التصنيف الحالي</small>' : ''}</button></li>`;
+        }).join('')}</ul>
+      </div>`, { tone: product.section_id });
+    panel.querySelector('.moves').addEventListener('click', async (e) => {
+      const b = e.target.closest('button[data-cat]');
+      if (!b || b.disabled) return;
+      const target = S.D.catById[b.dataset.cat];
+      $$('.moves button', panel).forEach((x) => { x.disabled = true; });
+      b.classList.add('busy');
+      S.pending++;
+      try {
+        await S.store.saveProduct(product.id, {
+          section_id: product.section_id, category_id: target.id, name: product.name,
+          description: product.description || '', image_path: product.image_path || '', is_shared: !!product.is_shared,
+        }, product.member_ids);
+        product.category_id = target.id;
+        closePanel(true);
+        render();
+        toast(`نُقل المنتج إلى «${target.name}»`);
+      } catch (ex) {
+        console.error(ex);
+        $$('.moves button', panel).forEach((x) => { x.disabled = x.getAttribute('aria-current') === 'true'; });
+        b.classList.remove('busy');
+        toast('تعذّر نقل المنتج. أعيدوا المحاولة.', { type: 'error' });
+      } finally { S.pending--; scheduleReload(60); }
+    });
+    const first = panel.querySelector('.moves button:not([disabled])');
+    if (first) first.focus();
+  }
+
   // ---------- تصغير الصورة قبل الرفع ----------
   async function compressImage(file, maxSide, quality) {
     const url = URL.createObjectURL(file);
@@ -868,6 +914,7 @@
         case 'more': if (menuEl && menuEl.dataset.for === id) closeMenu(); else openMenu(a, id); break;
         case 'edit': closeMenu(); openProductForm(S.D.productById[id]); break;
         case 'share': closeMenu(); openShare(S.D.productById[id]); break;
+        case 'move': closeMenu(); openMove(S.D.productById[id]); break;
         case 'delete':
           if (!a.classList.contains('armed')) { a.classList.add('armed'); a.querySelector('span').textContent = 'اضغطوا مرة أخرى للحذف'; }
           else { closeMenu(); deleteProduct(id); }
