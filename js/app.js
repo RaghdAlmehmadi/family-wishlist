@@ -331,7 +331,7 @@
   function ownerLabel(p, member) {
     const D = S.D;
     const names = p.member_ids.map((id) => D.memberById[id]).filter(Boolean).map((m) => m.name);
-    if (p.is_shared) return member === 'all' || member === 'shared' ? `مشترك: ${names.length === D.members.length ? 'العائلة كلها' : names.join('، ')}` : 'مشترك';
+    if (p.is_shared) return 'مشترك';
     if (member === 'all' && names[0]) return `ل${names[0]}`;
     return '';
   }
